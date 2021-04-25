@@ -2,7 +2,8 @@ require 'test_helper'
 
 class CustomerTest < ActiveSupport::TestCase
  def setup
- @customer = Customer.new(username: "Test Customer", email: "customer@myapp.com")
+ @customer = Customer.new(username: "Test Customer", email: "customer@myapp.com",
+ password: "test123", password_confirmation: "test123")
  end
  test "should be valid" do
  assert @customer.valid?
@@ -39,5 +40,25 @@ class CustomerTest < ActiveSupport::TestCase
  @customer.email = email
  assert_not @customer.valid?, "#{email.inspect} should be invalid"
  end
+ end
+ test "email addresses should be unique" do
+ clone = @customer.dup
+ clone.email = @customer.email.upcase
+ @customer.save
+ assert_not clone.valid?
+ end 
+ test "email addresses should be saved as lower-case" do
+ mixed_case_email = "Joe@RAd.oRg.AU"
+ @customer.email = mixed_case_email
+ @customer.save
+ assert_equal mixed_case_email.downcase, @customer.reload.email
+ end
+ test "password cannot blank" do
+ @customer.password = @customer.password_confirmation = " " * 6
+ assert_not @customer.valid?
+ end
+ test "password should be longer than 6 chars" do
+ @customer.password = @customer.password_confirmation = "x" * 5
+ assert_not @customer.valid?
  end
 end
