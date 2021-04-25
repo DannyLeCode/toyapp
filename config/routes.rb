@@ -13,7 +13,11 @@ Rails.application.routes.draw do
   
   get '/about', to: 'static_pages#about'
   get '/contact', to: 'static_pages#contact'
+  
+  get '/signup', to: 'customers#new'
+ post '/signup', to: 'customers#create'
 
   resources :users
   root 'static_pages#home'
+  resources :customers
 end
