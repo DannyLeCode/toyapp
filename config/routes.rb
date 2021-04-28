@@ -1,4 +1,5 @@
 Rails.application.routes.draw do
+  devise_for :otherusers
   get 'customers/new'
 
   get 'users/login'

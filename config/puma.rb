@@ -52,5 +52,7 @@ on_worker_boot do
 end
 #
 
+ActiveRecord::Base.establish_connection if defined?(ActiveRecord)
+
 # Allow puma to be restarted by `rails restart` command.
 plugin :tmp_restart
